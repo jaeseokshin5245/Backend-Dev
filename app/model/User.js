@@ -28,7 +28,7 @@ class User {
     async checknum() {
         const client=this.body;
         try{
-            const result=await UserStorage.checkStudent(client.school, client.number);
+            const result=await UserStorage.checkStudent(client.SCHUL_NA, client.SCHUL_NU);
             if(result.success===true){
                 return result;
             }

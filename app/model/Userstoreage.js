@@ -17,16 +17,16 @@ class UserStorage {
 
     static async save(userInfo) {
         return new Promise((resolve, reject) => {
-            const infoquery = "insert into USRSCHINFO(email, SCHUL_NA, SCHUL_DE, SCHUL_NU, L_NAME, F_NAME, MTH_LANG) Values(?, ?, ?, ?, ?, ?, ?);"
+            const infoquery = "insert into USRSCHINFO(email, SCHUL_NA, SCHUL_DE, SCHUL_NU, L_NAME, F_NAME) Values(?, ?, ?, ?, ?, ?);"
                 signupinfodb.query(infoquery,
-                    [userInfo.email, userInfo.school, userInfo.department, userInfo.number, userInfo.Lname, userInfo.Fname, userInfo.language], (err) => {
+                    [userInfo.email, userInfo.SCHUL_NA, userInfo.SCHUL_DE, userInfo.SCHUL_NU, userInfo.L_NAME, userInfo.F_NAME], (err) => {
                         if (err) reject(`${err}`);
                         resolve({ success: true });
                     });
 
             const loginquery = "insert into USERDTO(email, user_Password) Values(?, ?);"
                 signupinfodb.query(loginquery,
-                    [userInfo.email, userInfo.password], (err) => {
+                    [userInfo.email, userInfo.user_Password], (err) => {
                         if (err) reject(`${err}`);
                         resolve({ success: true });
                     });
