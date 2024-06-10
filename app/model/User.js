@@ -10,43 +10,31 @@ class User {
 
     async login() {
         const client = this.body;
-        try {
-            const user = await UserStorage.getUserInfo(client.id)
+        const user = await UserStorage.getLoginInfo(client.email)
 
-            if (user) {
-                if (user.id === client.id && user.password === client.password) {
-                    return { success: true };
-                }
-                return { success: false, msg: "비밀번호가 틀렸습니다." };
+        if (user) {
+            if (user.email === client.email && user.user_Password === client.user_Password) {
+                return { success: true };
             }
-            return { success: false, msg: "존재하지 않는 아이디 입니다." };
-        } catch (err) {
-            return { success: false, msg: err };
+            return { success: false, msg: "비밀번호가 틀렸습니다." };
         }
+        return { success: false, msg: "존재하지 않는 아이디 입니다." };
     }
 
     async checknum() {
         const client=this.body;
-        try{
-            const result=await UserStorage.checkStudent(client.SCHUL_NA, client.SCHUL_NU);
-            if(result.success===true){
-                return result;
-            }
-            return {success:false, msg:"존재하기 않은 학번입니다."};
-        }catch (err) {
-            return { success: false, msg: err };
+        const result=await UserStorage.checkStudent(client.SCHUL_NA, client.SCHUL_NU);
+        if(result.success===true){
+            return result;
         }
+        return {success:false, msg:"존재하기 않은 학번입니다."};
     }
 
-    async register() {
+    async signup() {
         const client = this.body;
-        try {
-            const response = await UserStorage.save(client);
-            return response;
-        } catch (err) {
-            return { success: false, msg: err };
+        const response = await UserStorage.save(client);
+        return response;
         }
-    }
 }
 
 module.exports = User;

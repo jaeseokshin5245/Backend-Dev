@@ -3,6 +3,18 @@
 const signupinfodb = require("../db/connectDB.js");
 
 class UserStorage {
+
+    static getLoginInfo(email){
+        return new Promise((resolve, reject) =>{
+            const emailQuery = `SELECT * FROM USERDTO WHERE email = ?;`
+            signupinfodb.query(emailQuery, [email], (err, data) => {
+                if (err) {
+                    reject(`${err}`);}
+                else resolve(data[0]);
+            });
+        });
+        }
+
     static checkStudent(SCHUL_NA, SCHUL_NU) {
         return new Promise((resolve, reject) => {
             const school=SCHUL_NA+"_NU";
@@ -17,19 +29,19 @@ class UserStorage {
 
     static async save(userInfo) {
         return new Promise((resolve, reject) => {
-            const infoquery = "insert into USRSCHINFO(email, SCHUL_NA, SCHUL_DE, SCHUL_NU, L_NAME, F_NAME) Values(?, ?, ?, ?, ?, ?);"
-                signupinfodb.query(infoquery,
-                    [userInfo.email, userInfo.SCHUL_NA, userInfo.SCHUL_DE, userInfo.SCHUL_NU, userInfo.L_NAME, userInfo.F_NAME], (err) => {
-                        if (err) reject(`${err}`);
-                        resolve({ success: true });
-                    });
-
             const loginquery = "insert into USERDTO(email, user_Password) Values(?, ?);"
                 signupinfodb.query(loginquery,
                     [userInfo.email, userInfo.user_Password], (err) => {
-                        if (err) reject(`${err}`);
-                        resolve({ success: true });
+                        if (err) return reject(`${err}`);
                     });
+                    
+            const infoquery = "insert into USERSCHINFO(email, SCHUL_NA, SCHUL_DE, SCHUL_NU, L_NAME, F_NAME) Values(?, ?, ?, ?, ?, ?);"
+                signupinfodb.query(infoquery,
+                    [userInfo.email, userInfo.SCHUL_NA, userInfo.SCHUL_DE, userInfo.SCHUL_NU, userInfo.L_NAME, userInfo.F_NAME], (err) => {
+                        if (err) return reject(`${err}`);
+                    });
+            
+                    resolve({ success: true });
         });
     }
 }

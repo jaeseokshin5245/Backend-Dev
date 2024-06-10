@@ -4,12 +4,13 @@
 const express = require("express");
 const router = express.Router();
 const ctrl = require("./login.ctrl");
+const start = require("./detailRouter");
 
-router.get("/", ctrl.output.login);
+//router.get("/", ctrl.output.start);
 
-router.post("/login", ctrl.process.login);
-router.post("/register", ctrl.process.register);
-router.post("/checknum", ctrl.process.checknum);
-router.post("/checkemail", ctrl.process.checkemail)
+router.post("/", (req,res)=>{
+    const route = new start(req.body);
+    route.routing(req,res);
+});
 
 module.exports = router;
