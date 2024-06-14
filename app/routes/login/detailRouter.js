@@ -11,18 +11,21 @@ class Router{
     async routing(req, res) {
         const endpoint = this.body;
         try {
-            switch (endpoint.user_Status) {
+            switch (endpoint.endpoint) {
                 case "login" :
                     await ctrl.process.login(req, res);
                     break;
-                case "signup" :
-                    await ctrl.process.signup(req,res);
+                case "register" :
+                    await ctrl.process.register(req,res);
                     break;
                 case "checknum":
                     await ctrl.process.checknum(req,res);
                     break;
                 case "checkemail":
                     await ctrl.process.checkemail(req,res);
+                    break;
+                case "register_ok":
+                    await ctrl.process.register_ok(req,res);
                     break;
             }
         } catch (err) {

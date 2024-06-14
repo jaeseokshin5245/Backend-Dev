@@ -2,7 +2,7 @@
 
 const { checknumdb } = require("../../db/connectDB");
 const User = require("../../model/User");
-const Start = require("../../model/Start");
+//const Start = require("../../db/School_list.csv");
 //const { response } = require("../../../app");
 
 const output = {
@@ -13,6 +13,7 @@ const output = {
 }
 
 const process = {
+    //로그인
     login: async (req, res) => {
         try {
             const user = new User(req.body);
@@ -22,17 +23,17 @@ const process = {
             return res.status(500).json({ error: error.message });
         }
     },
-
-    signup: async (req, res) => {
+    //회원가입 학교 리스트 보내기
+    register: async (req, res) => {
         try {
             const user = new User(req.body);
-            const response = await user.signup();
+            const response = await user.register();
             return res.json(response);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
     },
-
+    //학번 조회, 학과 리스트 보내기
     checknum: async (req, res) => {
         try {
             const user = new User(req.body);
@@ -42,12 +43,22 @@ const process = {
             return res.status(500).json({ error: error.message });
         }
     },
-
-    // checkemail: async (req, res) => {
-    //     const user = new User(req.body);
-    //     const response = await user.checkemail();
-    //     return res.json(response);
-    // }
+    //이메일 인증
+    checkemail: async (req, res) => {
+        const user = new User(req.body);
+        const response = await user.checkemail();
+        return res.json(response);
+    },
+    //회원가입 완료
+    register_ok: async(req, res)=>{
+        try {
+            const user = new User(req.body);
+            const response = await user.register_ok();
+            return res.json(response);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    }
 };
 
 module.exports = {
