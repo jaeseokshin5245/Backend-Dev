@@ -10,13 +10,13 @@ function get_csv(filename){
     const csvPath=path.join("./db/", filename +"_list.csv")
     const csvBuffer = fs.readFileSync(csvPath)
     const csv=iconv.decode(csvBuffer,"EUC-KR")
-    const allRows=csv.split(/\n|\r/)
+    const allRows=csv.split(/\r?\n/)
     const rowData=[]
 
     for(var singleRow=0; singleRow<allRows.length; singleRow++){
         var rowCells=allRows[singleRow].split(',')
         if(rowCells!=0){
-            rowData.push(rowCells)
+            rowData.push(allRows[singleRow])
         }
     }
     return rowData
@@ -45,7 +45,7 @@ class User {
     async register(){
         const client=this.body;
         const School_list=get_csv("School")
-        return{success:true, msg: School_list};
+        return{success:true, list: School_list};
     }
 
     async checknum() {

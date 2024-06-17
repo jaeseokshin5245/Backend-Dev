@@ -13,7 +13,7 @@ class UserStorage {
                 else resolve(data[0]);
             });
         });
-        }
+    }
 
     static checkStudent(SCHUL_NA, SCHUL_NU) {
         return new Promise((resolve, reject) => {
