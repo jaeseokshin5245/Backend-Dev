@@ -1,9 +1,8 @@
 "use strict";
 
-const { checknumdb } = require("../../db/connectDB");
+const logger = require("../../db/logger.js")
 const User = require("../../model/User");
-//const Start = require("../../db/School_list.csv");
-//const { response } = require("../../../app");
+
 
 const output = {
     start: (req, res) => {
@@ -18,6 +17,9 @@ const process = {
         try {
             const user = new User(req.body);
             const response = await user.login();
+            logger.info(
+                `POST /login 200 Response : "success : ${response.success}, msg: ${response.msg}"`
+            );
             return res.json(response);
         } catch (error) {
             return res.status(500).json({ error: error.message });
@@ -28,6 +30,9 @@ const process = {
         try {
             const user = new User(req.body);
             const response = await user.register();
+            logger.info(
+                `GET /register 200 Response : "success : ${response.success}, msg: ${response.msg}"`
+            );
             return res.json(response);
         } catch (error) {
             return res.status(500).json({ error: error.message });
@@ -38,6 +43,9 @@ const process = {
         try {
             const user = new User(req.body);
             const response = await user.checknum();
+            logger.info(
+                `GET /checknum 200 Response : "success : ${response.success}, msg: ${response.msg}"`
+            );
             return res.json(response);
         } catch (error) {
             return res.status(500).json({ error: error.message });
