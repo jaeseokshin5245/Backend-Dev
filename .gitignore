@@ -1,0 +1,10 @@
+# Exclude node_modules directory
+app/node_modules/
+
+# Exclude .env file
+app/.env
+
+# Optionally, you can exclude log directories and files
+app/log/
+app/logs/
+*.log
