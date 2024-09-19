@@ -3,8 +3,9 @@
 const UserStorage = require("./Userstoreage")
 const fs = require("fs")
 const path = require("path")
-const iconv=require("iconv-lite")
-const SendEmail=require("./SendEmail")
+const iconv=require("iconv-lite");
+const SendEmail = require("./SendEmail");
+//const SendEmail=require("./SendEmail")
 
 function get_csv(filename){
     const csvPath=path.join("./db/", filename +"_list.csv")
@@ -28,6 +29,31 @@ class User {
         this.body = body;
     }
 
+    //학교 리스트 보내기
+    async schoolList(){
+        const client=this.body;
+        const School_list=get_csv("School")
+        return School_list;
+    }
+
+    //학과 리스트 보내기
+    async departmentList(){
+        const client=this.body;
+        const Department_list=get_csv(client.SCHUL_NA+"_dep")
+        return{success:true, list: Department_list};
+    }
+
+    //이메일 로그인 정보에 있는지 확인하기
+    async judge(){
+        const client=this.body;
+        const result=await UserStorage.judgeEmailInfo(client.email)
+        const school_list=await this.schoolList();
+        if (result.success===false){
+            return {success:false, msg: result.msg, list: school_list}
+        }
+        return {success: result.success, msg: result.msg};
+    }
+
     //로그인
     async login() {
         const client = this.body;
@@ -41,12 +67,6 @@ class User {
         }
         return { success: false, msg: "존재하지 않는 아이디 입니다." };
     }
-    //학교 리스트 보내기
-    async register(){
-        const client=this.body;
-        const School_list=get_csv("School")
-        return{success:true, list: School_list};
-    }
 
     async checknum() {
         const client=this.body;
@@ -58,17 +78,31 @@ class User {
         return {success:false, msg:"존재하기 않은 학번입니다."};
     }
 
+    // 이메일 인증
     async checkemail(){
         const client=this.body;
-        // const sending=await SendEmail.checkemail(client.lang, client.email);
+        const result=await SendEmail.sendMail(client.email);
+        if(result.success===true){
+            return {success:true, result:result.msg};
+        }
+        return {success:false, msg:result.msg};
 
     }
-
+    // 회원가입 정보 DB에 저장
     async register_ok() {
         const client = this.body;
         const response = await UserStorage.save(client);
         return response;
         }
+    // 비밀번호 변경
+    async changePassword(){
+        const client = this.body;
+        const response = await UserStorage.updatePassword(client.email, client.user_Password);
+        if(response.success===true){
+            return {success:true, result:response.msg};
+        }
+        return {success:false, msg:response.msg};
+    }
 }
 
 module.exports = User;

@@ -8,10 +8,10 @@ const signupinfo = mysql.createConnection({
 })
 
 const signupinfodb = mysql.createConnection({
-    host: process.env.dhost,
-    user: process.env.duser,
-    password: process.env.dpassword,
-    database: process.env.database,
+    host: process.env.DHOST,
+    user: process.env.DUSER,
+    password: process.env.DPASSWORD,
+    database: process.env.DATABASE,
 })
 
 signupinfodb.connect();
